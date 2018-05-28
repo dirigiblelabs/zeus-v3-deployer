@@ -1,5 +1,5 @@
 {
-	'description': 'Containers view',
+	'description': 'Deploy view',
 	'extensionPoint': 'launchpad-zeus-applications-view',
 	'module': 'zeus-deployer/views/Deploy/view.js'
 }
