@@ -4,7 +4,7 @@ angular.module('page')
 	var messageHub = new FramesMessageHub();
 
 	var message = function(evtName, data){
-		messageHub.post({data: data}, 'zeus.zeus-templates.Containers.' + evtName);
+		messageHub.post({data: data}, 'zeus.zeus-deployer.Applications.' + evtName);
 	};
 
 	var on = function(topic, callback){
@@ -14,9 +14,12 @@ angular.module('page')
 	return {
 		message: message,
 		on: on,
-		onContainerProtocolsModified: function(callback) {
-			on('zeus.zeus-templates.ContainerProtocols.modified', callback);
+		onClusterModified: function(callback) {
+			on('zeus.zeus-accounts.Clusters.modified', callback);
 		},
+		onTemplateModified: function(callback) {
+			on('zeus.zeus-templates.Templates.modified', callback);
+		}, 
 		messageEntityModified: function() {
 			message('modified');
 		}
@@ -24,26 +27,27 @@ angular.module('page')
 }])
 .controller('PageController', function ($scope, $http, $messageHub) {
 
-	var api = '/services/v3/js/zeus-templates/api/Containers.js';
-	var protocolOptionsApi = '/services/v3/js/zeus-templates/api/ContainerProtocols.js';
+	var api = '/services/v3/js/zeus-deployer/api/Applications.js';
+	var clusterOptionsApi = '/services/v3/js/zeus-accounts/api/Clusters.js';
+	var templateOptionsApi = '/services/v3/js/zeus-templates/api/Templates.js';
 
-	$scope.protocolOptions = [];
+	$scope.clusterOptions = [];
 
-	function protocolOptionsLoad() {
-		$http.get(protocolOptionsApi)
+	function clusterOptionsLoad() {
+		$http.get(clusterOptionsApi)
 		.success(function(data) {
-			$scope.protocolOptions = data;
+			$scope.clusterOptions = data;
 		});
 	}
-	protocolOptionsLoad();
+	clusterOptionsLoad();
 
-	function load() {
-		$http.get(api)
+	function templateOptionsLoad() {
+		$http.get(templateOptionsApi)
 		.success(function(data) {
-			$scope.data = data;
+			$scope.templateOptions = data;
 		});
 	}
-	load();
+	templateOptionsLoad();
 
 	$scope.openNewDialog = function() {
 		$scope.actionType = 'new';
@@ -71,7 +75,6 @@ angular.module('page')
 	$scope.create = function() {
 		$http.post(api, JSON.stringify($scope.entity))
 		.success(function(data) {
-			load();
 			toggleEntityModal();
 			$messageHub.messageEntityModified();
 		}).error(function(data) {
@@ -80,39 +83,8 @@ angular.module('page')
 			
 	};
 
-	$scope.update = function() {
-		$http.put(api + '/' + $scope.entity.Id, JSON.stringify($scope.entity))
-
-		.success(function(data) {
-			load();
-			toggleEntityModal();
-			$messageHub.messageEntityModified();
-		}).error(function(data) {
-			alert(JSON.stringify(data));
-		})
-	};
-
-	$scope.delete = function() {
-		$http.delete(api + '/' + $scope.entity.Id)
-		.success(function(data) {
-			load();
-			toggleEntityModal();
-			$messageHub.messageEntityModified();
-		}).error(function(data) {
-			alert(JSON.stringify(data));
-		});
-	};
-
-	$scope.protocolOptionValue = function(optionKey) {
-		for (var i = 0 ; i < $scope.protocolOptions.length; i ++) {
-			if ($scope.protocolOptions[i].Id === optionKey) {
-				return $scope.protocolOptions[i].Name;
-			}
-		}
-		return null;
-	};
-
-	$messageHub.onContainerProtocolsModified(protocolOptionsLoad);
+	$messageHub.onClusterModified(clusterOptionsLoad);
+	$messageHub.onTemplateModified(templateOptionsLoad);
 
 	function toggleEntityModal() {
 		$('#entityModal').modal('toggle');
