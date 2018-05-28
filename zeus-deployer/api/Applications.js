@@ -9,4 +9,10 @@ rs.service()
 			var deployment = Applications.create(application.templateId, application.clusterId, application.name);
 			response.println(JSON.stringify(deployment));
 		})
+	.resource('{id}')
+		.delete(function(ctx, request, response) {
+			var applicationId = ctx.pathParameters.id;
+			var deployment = Applications.delete(applicationId);
+			response.println(JSON.stringify(deployment));
+		})
 .execute();

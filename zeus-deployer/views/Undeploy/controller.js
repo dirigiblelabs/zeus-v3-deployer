@@ -14,8 +14,8 @@ angular.module('page')
 	return {
 		message: message,
 		on: on,
-		onApplicationModified: function(callback) {
-			on('zeus.zeus-applications.Applications.modified', callback);
+		onApplicationRefresh: function(callback) {
+			on('zeus.zeus-applications.Applications.refresh', callback);
 		},
 		messageEntityModified: function() {
 			message('modified');
@@ -74,7 +74,7 @@ angular.module('page')
 			
 	};
 
-	$messageHub.onApplicationModified(applicationOptionsLoad);
+	$messageHub.onApplicationRefresh(applicationOptionsLoad);
 
 	function toggleEntityModal() {
 		$('#entityModal').modal('toggle');

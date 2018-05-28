@@ -29,6 +29,7 @@ exports.create = function(templateId, clusterId, name) {
 	};
 };
 
-exports.undeploy = function(templateId) {
-	
+exports.delete = function(applicationId) {
+	var application = dao.get(applicationId);
+	return application;
 };
