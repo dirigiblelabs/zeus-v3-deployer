@@ -5,8 +5,6 @@ var Credentials = require('zeus-deployer/utils/Credentials');
 exports.create = function(templateId, clusterId, applicationName) {
 	var credentials = Credentials.getCredentials(clusterId);
 
-	console.error('Credentials: ' + JSON.stringify(credentials));
-
 	var deployment = Deployments.create(credentials.server, credentials.token, credentials.namespace, templateId, applicationName);
 	var service = Services.create(credentials.server, credentials.token, credentials.namespace, templateId, applicationName);
 
