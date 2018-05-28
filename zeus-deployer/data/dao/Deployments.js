@@ -9,8 +9,8 @@ var GET_SERVICES = 'select * from ZEUS_TEMPLATE_SERVICES '
 	+ 'join ZEUS_TEMPLATE_SERVICE_TYPES on ZTS_TYPE = ZTST_ID '
 	+ 'where ZTS_TEMPLATE = ?';
 
-var GET_VARIABLES = 'select * from ZEUS_TEMPLATE_VARIABLES ';
-//	+ 'where ZTV_TEMPLATE = ?';
+var GET_VARIABLES = 'select * from ZEUS_TEMPLATE_VARIABLES '
+	+ 'where ZTV_TEMPLATE = ?';
 
 exports.getContainers = function(templateId) {
 	var containers = query.execute(GET_CONTAINERS, [{
@@ -46,7 +46,16 @@ exports.getServices = function(templateId) {
 };
 
 exports.getVariables = function(templateId) {
-	var variables = query.execute(GET_VARIABLES);
+	var variables = query.execute(GET_VARIABLES, [{
+		'type': 'INTEGER',
+		'value': templateId
+	}]);
 
+	variables = variables.map(function(next) {
+		return {
+			'name': next.ZTV_NAME,
+			'value': next.ZTV_VALUE
+		};
+	});
 	return variables;
 };
