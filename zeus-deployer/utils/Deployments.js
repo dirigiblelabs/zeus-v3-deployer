@@ -1,4 +1,4 @@
-var DeploymentsApi = require('kubernetes/apis/apps/v1beta1/Deployments');
+var DeploymentsApi = require('kubernetes/apis/apps/v1/Deployments');
 var DeploymentDao = require('zeus-deployer/data/dao/Deployments');
 
 exports.create = function(server, token, namespace, templateId, applicationName) {
