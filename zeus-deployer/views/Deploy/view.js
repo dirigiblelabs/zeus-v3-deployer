@@ -15,6 +15,6 @@ exports.getView = function() {
 		'label': 'Deploy',
 		'factory': 'frame',
 		'region': 'left-top',
-		'link': '/services/v3/web/zeus-deployer/views/Deployer/index.html'
+		'link': '/services/v3/web/zeus-deployer/views/Deploy/index.html'
 	};
 };
