@@ -4,9 +4,9 @@ var Applications = require('zeus-deployer/utils/Applications');
 
 rs.service()
 	.resource('')
-		.get(function(ctx, request, response) {
-			var templateId = 1;
-			var deployment = Applications.create(templateId);
+		.post(function(ctx, request, response) {
+			var application = request.getJSON();
+			var deployment = Applications.create(application.templateId, application.clusterId, application.name);
 			response.println(JSON.stringify(deployment));
 		})
 .execute();
