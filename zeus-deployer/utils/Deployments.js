@@ -1,15 +1,15 @@
 var DeploymentsApi = require('kubernetes/apis/apps/v1beta1/Deployments');
 var DeploymentDao = require('zeus-deployer/data/dao/Deployments');
 
-exports.create = function(server, token, namespace, templateId) {
+exports.create = function(server, token, namespace, templateId, applicationName) {
 	var api = new DeploymentsApi(server, token, namespace);
 
 	var builder = api.getEntityBuilder();
 	builder.getMetadata().setNamespace(namespace);
 
-	builder.getMetadata().setName('test-application');
+	builder.getMetadata().setName(applicationName);
 	builder.getMetadata().setLabels({
-		'application': 'zeus-application-test'
+		'zeus-application': applicationName
 	});
 
 	builder.getSpec().setReplicas(1);

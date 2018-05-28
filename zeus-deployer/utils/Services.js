@@ -1,24 +1,27 @@
 var ServicesApi = require('kubernetes/api/v1/Services');
 var DeploymentDao = require('zeus-deployer/data/dao/Deployments');
 
-exports.create = function(server, token, namespace, templateId) {
-	var api = new ServicesApi(server, token, namespace);
+exports.create = function(server, token, namespace, templateId, applicationName) {
+	var services = DeploymentDao.getServices(templateId);
 
-	var builder = api.getEntityBuilder();
-
-	builder.getMetadata().setNamespace(namespace);
-
-	builder.getMetadata().setName('test-application');
-	builder.getMetadata().setLabels({
-		'application': 'zeus-application-test'
-	});
-
-	builder.getSpec().setType('NodePort');
-	builder.getSpec().addPort({
-		'port': 8080,
-		'targetPort': 8080
-	});
+	for (var i = 0 ; i < services.length; i ++) {
+		var api = new ServicesApi(server, token, namespace);
 	
-	var entity = builder.build();
-	return api.create(entity);
+		var builder = api.getEntityBuilder();
+	
+		builder.getMetadata().setNamespace(namespace);
+	
+		builder.getMetadata().setName(applicationName + '-' + services[i].name);
+		builder.getMetadata().setLabels({
+			'zeus-application': applicationName
+		});
+	
+		builder.getSpec().setType(services[i].type);
+		builder.getSpec().addPort({
+			'port': services[i].port
+		});
+		
+		var entity = builder.build();
+		return api.create(entity);
+	}
 };
