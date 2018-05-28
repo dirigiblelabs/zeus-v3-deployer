@@ -22,6 +22,9 @@ angular.module('page')
 		}, 
 		messageEntityModified: function() {
 			message('modified');
+		},
+		messageApplicationsRefresh: function() {
+			messageHub.post({data: null}, 'zeus.zeus-applications.Applications.refresh');
 		}
 	};
 }])
@@ -68,7 +71,6 @@ angular.module('page')
 	};
 
 	$scope.close = function() {
-		load();
 		toggleEntityModal();
 	};
 
@@ -77,6 +79,7 @@ angular.module('page')
 		.success(function(data) {
 			toggleEntityModal();
 			$messageHub.messageEntityModified();
+			$messageHub.messageApplicationsRefresh();
 		}).error(function(data) {
 			alert(JSON.stringify(data));
 		});
