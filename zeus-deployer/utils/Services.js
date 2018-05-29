@@ -2,7 +2,6 @@ var ServicesApi = require('kubernetes/api/v1/Services');
 var DeploymentDao = require('zeus-deployer/data/dao/Deployments');
 
 exports.create = function(server, token, namespace, templateId, applicationName) {
-	console.error('Template services: ' + applicationName);
 	var result = [];
 	var services = DeploymentDao.getServices(templateId);
 
@@ -24,7 +23,6 @@ exports.create = function(server, token, namespace, templateId, applicationName)
 		});
 		
 		var entity = builder.build();
-		console.error('Services Entity: ' + JSON.stringify(entity))
 		result.push(api.create(entity));
 	}
 	return result;

@@ -11,9 +11,7 @@ exports.create = function(templateId, clusterId, name) {
 	var credentials = Credentials.getCredentials(clusterId);
 
 	var deployment = Deployments.create(credentials.server, credentials.token, credentials.namespace, templateId, name);
-	console.error('Before Services Create');
 	var services = Services.create(credentials.server, credentials.token, credentials.namespace, templateId, name);
-	console.error('Services created: ' + JSON.stringify(services));
 
 	var applicationId = dao.create({
 		'Template': templateId,

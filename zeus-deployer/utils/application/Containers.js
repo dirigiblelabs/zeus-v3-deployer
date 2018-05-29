@@ -18,6 +18,5 @@ exports.delete = function(applicationId) {
 		'Application': applicationId
 	})[0];
 
-	console.error('Container to be deleted: ' + JSON.stringify(entity));
 	dao.delete(entity.Id);
 };
