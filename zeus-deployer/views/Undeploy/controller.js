@@ -22,6 +22,18 @@ angular.module('page')
 		},
 		messageApplicationsRefresh: function() {
 			messageHub.post({data: null}, 'zeus.zeus-applications.Applications.refresh');
+		},
+		messageContainersRefresh: function() {
+			messageHub.post({data: null}, 'zeus.zeus-applications.Containers.refresh');
+		},
+		messageServicesRefresh: function() {
+			messageHub.post({data: null}, 'zeus.zeus-applications.Services.refresh');
+		},
+		messageEndpointsRefresh: function() {
+			messageHub.post({data: null}, 'zeus.zeus-applications.Endpoints.refresh');
+		},
+		messageVariablesRefresh: function() {
+			messageHub.post({data: null}, 'zeus.zeus-applications.Variables.refresh');
 		}
 	};
 }])
@@ -65,9 +77,13 @@ angular.module('page')
 	$scope.delete = function() {
 		$http.delete(api + '/' + $scope.entity.applicationId)
 		.success(function(data) {
-			toggleEntityModal();
 			$messageHub.messageEntityModified();
 			$messageHub.messageApplicationsRefresh();
+			$messageHub.messageContainersRefresh();
+			$messageHub.messageServicesRefresh();
+			$messageHub.messageEndpointsRefresh();
+			$messageHub.messageVariablesRefresh();
+			toggleEntityModal();
 		}).error(function(data) {
 			alert(JSON.stringify(data));
 		});

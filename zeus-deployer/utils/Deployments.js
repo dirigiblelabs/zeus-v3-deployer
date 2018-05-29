@@ -19,6 +19,11 @@ exports.create = function(server, token, namespace, templateId, applicationName)
 	return api.create(entity);
 };
 
+exports.delete = function(server, token, namespace, applicationName) {
+	var api = new DeploymentsApi(server, token, namespace);
+	return api.delete(applicationName);
+};
+
 function addContainers(builder, templateId) {
 	var containers = DeploymentDao.getContainers(templateId);
 	for (var i = 0 ; i < containers.length; i ++) {

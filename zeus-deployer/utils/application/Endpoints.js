@@ -9,3 +9,11 @@ exports.create = function(server, applicationId, services) {
 		});
 	}
 };
+
+exports.delete = function(applicationId) {
+	var entity = dao.list({
+		'Application': applicationId
+	})[0];
+
+	dao.delete(entity.Id);
+};

@@ -1,4 +1,5 @@
 var dao = require('zeus-applications/data/dao/Applications');
+
 var Deployments = require('zeus-deployer/utils/Deployments');
 var Services = require('zeus-deployer/utils/Services');
 var Credentials = require('zeus-deployer/utils/Credentials');
@@ -10,14 +11,15 @@ exports.create = function(templateId, clusterId, name) {
 	var credentials = Credentials.getCredentials(clusterId);
 
 	var deployment = Deployments.create(credentials.server, credentials.token, credentials.namespace, templateId, name);
+	console.error('Before Services Create');
 	var services = Services.create(credentials.server, credentials.token, credentials.namespace, templateId, name);
+	console.error('Services created: ' + JSON.stringify(services));
 
 	var applicationId = dao.create({
 		'Template': templateId,
 		'Cluster': clusterId,
 		'Name': name
 	});
-
 
 	ApplicationContainers.create(applicationId, deployment);
 	ApplicationServices.create(applicationId, services);
@@ -31,5 +33,17 @@ exports.create = function(templateId, clusterId, name) {
 
 exports.delete = function(applicationId) {
 	var application = dao.get(applicationId);
-	return application;
+	var credentials = Credentials.getCredentials(application.Cluster);
+	var deployment = Deployments.delete(credentials.server, credentials.token, credentials.namespace, application.Name);
+	var services = Services.delete(credentials.server, credentials.token, credentials.namespace, application.Template, application.Name)
+
+	ApplicationContainers.delete(applicationId);
+	ApplicationServices.delete(applicationId);
+	ApplicationEndpoints.delete(applicationId);
+	dao.delete(applicationId);
+
+	return {
+		'deployment': deployment,
+		'services': services
+	};
 };
