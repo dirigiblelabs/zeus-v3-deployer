@@ -11,8 +11,8 @@
 exports.getView = function() {
 	return {
 		'id': 'Undeploy',
-		'name': 'Un-deploy',
-		'label': 'Un-deploy',
+		'name': 'Undeploy',
+		'label': 'Undeploy',
 		'factory': 'frame',
 		'region': 'left-top',
 		'link': '/services/v3/web/zeus-deployer/views/Undeploy/index.html'
