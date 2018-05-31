@@ -4,6 +4,7 @@ var Deployments = require('zeus-deployer/utils/Deployments');
 var Services = require('zeus-deployer/utils/Services');
 var Credentials = require('zeus-deployer/utils/Credentials');
 var ApplicationContainers = require('zeus-deployer/utils/application/Containers');
+var ApplicationVariables = require('zeus-deployer/utils/application/Variables');
 var ApplicationServices = require('zeus-deployer/utils/application/Services');
 var ApplicationEndpoints = require('zeus-deployer/utils/application/Endpoints');
 
@@ -20,6 +21,7 @@ exports.create = function(templateId, clusterId, name) {
 	});
 
 	ApplicationContainers.create(applicationId, deployment);
+	ApplicationVariables.create(applicationId, deployment);
 	ApplicationServices.create(applicationId, services);
 	ApplicationEndpoints.create(credentials.server, applicationId, services);
 
@@ -36,6 +38,7 @@ exports.delete = function(applicationId) {
 	var services = Services.delete(credentials.server, credentials.token, credentials.namespace, application.Template, application.Name)
 
 	ApplicationContainers.delete(applicationId);
+	ApplicationVariables.delete(applicationId);
 	ApplicationServices.delete(applicationId);
 	ApplicationEndpoints.delete(applicationId);
 	dao.delete(applicationId);
