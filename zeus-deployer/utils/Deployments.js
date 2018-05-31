@@ -26,13 +26,22 @@ exports.delete = function(server, token, namespace, applicationName) {
 
 function addContainers(builder, templateId) {
 	var containers = DeploymentDao.getContainers(templateId);
+	var env = DeploymentDao.getVariables(templateId);
 	for (var i = 0 ; i < containers.length; i ++) {
-		builder.getSpec().getTemplate().getSpec().addContainer({
+		var container = {
 			'name': containers[i].name,
 			'image': containers[i].image,
 			'ports': [{
 				'containerPort': containers[i].port
-			}]
-		});
-	}	
+			}],
+			'env': []
+		};
+		for (var j = 0; j < env.length; j ++) {
+			container.env.push({
+				'name': env[j].name,
+				'value': env[j].value
+			});
+		}
+		builder.getSpec().getTemplate().getSpec().addContainer(container);
+	}
 }
