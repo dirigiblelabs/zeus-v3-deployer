@@ -19,5 +19,7 @@ exports.delete = function(applicationId) {
 		'Application': applicationId
 	})[0];
 
-	dao.delete(entity.Id);
+	if (entity) {
+		dao.delete(entity.Id);
+	}
 };
