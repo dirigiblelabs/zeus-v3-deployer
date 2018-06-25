@@ -4,5 +4,11 @@
 		"type": "git",
 		"branch": "master",
 		"url": "https://github.com/dirigiblelabs/zeus-v3-deployer.git"
-	}
+	},
+	"dependencies": [{
+		"guid": "client-kubernetes",
+		"url": "https://github.com/dirigiblelabs/client-kubernetes.git",
+		"type": "git",
+		"branch": "master"
+	}]
 }
