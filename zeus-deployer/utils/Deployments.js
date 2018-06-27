@@ -12,7 +12,7 @@ exports.create = function(server, token, namespace, templateId, applicationName)
 		'zeus-application': applicationName
 	});
 
-	builder.getSpec().setReplicas(1);
+	builder.getSpec().setReplicas(DeploymentDao.getTemplate(templateId).replicas);
 	addContainers(builder, templateId);
 	
 	var entity = builder.build();
