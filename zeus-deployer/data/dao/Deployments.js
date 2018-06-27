@@ -24,7 +24,8 @@ exports.getTemplate = function(templateId) {
 		'id': templateId,
 		'name': template[0].TEMPLATE_NAME,
 		'replicas': template[0].TEMPLATE_REPLICAS,
-		'isStateful': template[0].TEMPLATE_IS_STATEFUL
+		'isStateful': template[0].TEMPLATE_IS_STATEFUL,
+		'mountPath': template[0].TEMPLATE_MOUNT_PATH
 	};
 }
 exports.getContainers = function(templateId) {

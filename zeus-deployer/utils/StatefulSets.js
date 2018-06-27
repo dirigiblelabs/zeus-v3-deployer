@@ -1,8 +1,8 @@
-var DeploymentsApi = require('kubernetes/apis/apps/v1/Deployments');
+var StatefulSetsApi = require('kubernetes/apis/apps/v1/StatefulSets');
 var DeploymentDao = require('zeus-deployer/data/dao/Deployments');
 
 exports.create = function(server, token, namespace, template, applicationName) {
-	var api = new DeploymentsApi(server, token, namespace);
+	var api = new StatefulSetsApi(server, token, namespace);
 
 	var builder = api.getEntityBuilder();
 	builder.getMetadata().setNamespace(namespace);
@@ -12,15 +12,18 @@ exports.create = function(server, token, namespace, template, applicationName) {
 		'zeus-application': applicationName
 	});
 
+	builder.setStorage('1Gi');
+	builder.getSpec().setServiceName(applicationName + '-' + DeploymentDao.getServices(template.id)[0].name);
 	builder.getSpec().setReplicas(template.replicas);
 	addContainers(builder, template);
 	
 	var entity = builder.build();
+
 	return api.create(entity);
 };
 
 exports.delete = function(server, token, namespace, applicationName) {
-	var api = new DeploymentsApi(server, token, namespace);
+	var api = new StatefulSetsApi(server, token, namespace);
 	return api.delete(applicationName);
 };
 
@@ -34,6 +37,10 @@ function addContainers(builder, template) {
 			'ports': [{
 				'containerPort': containers[i].port
 			}],
+            'volumeMounts': [{
+                'name': 'root',
+                'mountPath': template.mountPath
+            }],
 			'env': []
 		};
 		for (var j = 0; j < env.length; j ++) {

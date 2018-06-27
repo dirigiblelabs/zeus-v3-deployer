@@ -1,9 +1,9 @@
 var ServicesApi = require('kubernetes/api/v1/Services');
 var DeploymentDao = require('zeus-deployer/data/dao/Deployments');
 
-exports.create = function(server, token, namespace, templateId, applicationName) {
+exports.create = function(server, token, namespace, template, applicationName) {
 	var result = [];
-	var services = DeploymentDao.getServices(templateId);
+	var services = DeploymentDao.getServices(template.id);
 
 	for (var i = 0 ; i < services.length; i ++) {
 		var api = new ServicesApi(server, token, namespace);
