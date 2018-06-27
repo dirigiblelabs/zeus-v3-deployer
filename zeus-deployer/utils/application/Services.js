@@ -12,9 +12,11 @@ exports.create = function(applicationId, services) {
 };
 
 exports.delete = function(applicationId) {
-	var entity = dao.list({
+	var services = dao.list({
 		'Application': applicationId
-	})[0];
+	});
 
-	dao.delete(entity.Id);
+	for (var i = 0; i < services.length; i ++) {
+		dao.delete(services[i].Id);
+	}
 };

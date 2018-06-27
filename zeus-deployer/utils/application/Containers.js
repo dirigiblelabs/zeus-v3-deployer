@@ -14,9 +14,11 @@ exports.create = function(applicationId, deployment) {
 };
 
 exports.delete = function(applicationId) {
-	var entity = dao.list({
+	var containers = dao.list({
 		'Application': applicationId
-	})[0];
+	});
 
-	dao.delete(entity.Id);
+	for(var i = 0; i < containers.length; i ++) {
+		dao.delete(containers[i].Id);
+	}
 };
