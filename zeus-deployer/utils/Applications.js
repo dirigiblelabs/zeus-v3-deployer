@@ -34,8 +34,7 @@ exports.create = function(templateId, clusterId, name) {
 	ApplicationContainers.create(applicationId, deployment);
 	ApplicationVariables.create(applicationId, deployment);
 	ApplicationServices.create(applicationId, services);
-	// TODO: ApplicationIngresses.create(applicationId, ingresses);
-	ApplicationEndpoints.create(credentials.server, applicationId, services);
+	ApplicationEndpoints.create(credentials.server, applicationId, services, ingresses);
 
 	return {
 		'deployment': deployment,
