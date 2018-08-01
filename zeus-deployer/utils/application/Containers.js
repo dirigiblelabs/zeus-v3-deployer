@@ -1,4 +1,4 @@
-var dao = require('zeus-applications/data/dao/Containers')
+var dao = require('zeus-applications/data/dao/Explore/Containers')
 
 exports.create = function(applicationId, deployment) {
 	var containers = deployment.spec.template.spec.containers;

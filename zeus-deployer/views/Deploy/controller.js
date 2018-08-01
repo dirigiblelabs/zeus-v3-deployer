@@ -31,8 +31,8 @@ angular.module('page')
 .controller('PageController', function ($scope, $http, $messageHub) {
 
 	var api = '/services/v3/js/zeus-deployer/api/Applications.js';
-	var clusterOptionsApi = '/services/v3/js/zeus-accounts/api/Clusters.js';
-	var templateOptionsApi = '/services/v3/js/zeus-templates/api/Templates.js';
+	var clusterOptionsApi = '/services/v3/js/zeus-accounts/api/Deliver/Clusters.js';
+	var templateOptionsApi = '/services/v3/js/zeus-templates/api/Build/Templates.js';
 
 	$scope.clusterOptions = [];
 

@@ -1,4 +1,4 @@
-var dao = require('zeus-applications/data/dao/Applications');
+var dao = require('zeus-applications/data/dao/Explore/Applications');
 var DeploymentDao = require('zeus-deployer/data/dao/Deployments');
 
 var StatefulSets = require('zeus-deployer/utils/StatefulSets');

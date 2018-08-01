@@ -1,4 +1,4 @@
-var dao = require('zeus-applications/data/dao/Services')
+var dao = require('zeus-applications/data/dao/Explore/Services')
 
 exports.create = function(applicationId, services) {
 	for (var i = 0; i < services.length; i ++) {

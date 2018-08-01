@@ -40,7 +40,7 @@ angular.module('page')
 .controller('PageController', function ($scope, $http, $messageHub) {
 
 	var api = '/services/v3/js/zeus-deployer/api/Applications.js';
-	var applicationOptionsApi = '/services/v3/js/zeus-applications/api/Applications.js';
+	var applicationOptionsApi = '/services/v3/js/zeus-applications/api/Explore/Applications.js';
 
 	$scope.applicationOptions = [];
 
