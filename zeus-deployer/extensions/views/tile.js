@@ -11,9 +11,9 @@
 exports.getTile = function() {
 	return {
 		'name': 'Lifecycle',
-		'group': 'Applications',
+		'group': 'Explore',
 		'icon': 'share-alt',
-		'location': '/services/v3/web/zeus-applications/ui/Applications/index.html',
+		'location': '/services/v3/web/zeus-applications/ui/Explore/index.html',
 		'order': '100'
 	};
 };

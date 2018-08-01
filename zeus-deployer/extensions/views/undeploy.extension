@@ -1,1 +1,1 @@
-{"description":"Undeploy view","extensionPoint":"launchpad-zeus-Applications-view","module":"zeus-deployer/views/Undeploy/view.js"}
+{"description":"Undeploy view","extensionPoint":"launchpad-zeus-Explore-view","module":"zeus-deployer/views/Undeploy/view.js"}
