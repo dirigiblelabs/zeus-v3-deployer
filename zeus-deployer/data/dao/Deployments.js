@@ -27,7 +27,8 @@ exports.getTemplate = function(templateId) {
 		'isStateful': template[0].TEMPLATE_IS_STATEFUL,
 		'mountPath': template[0].TEMPLATE_MOUNT_PATH
 	};
-}
+};
+
 exports.getContainers = function(templateId) {
 	var containers = query.execute(GET_CONTAINERS, [{
 		'type': 'INTEGER',
@@ -55,7 +56,9 @@ exports.getServices = function(templateId) {
 		return {
 			'name': next.TEMPLATE_SERVICE_NAME,
 			'type': next.SERVICE_TYPE_NAME,
-			'port': next.TEMPLATE_SERVICE_PORT
+			'port': next.TEMPLATE_SERVICE_PORT,
+			'host': next.TEMPLATE_SERVICE_HOST,
+			'path': next.TEMPLATE_SERVICE_PATH
 		};
 	});
 	return services;
