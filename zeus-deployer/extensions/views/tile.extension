@@ -1,0 +1,5 @@
+{
+	"description": "Deploy/Undeploy tiles",
+	"extensionPoint": "launchpad-zeus-tiles",
+	"module": "zeus-deployer/extensions/views/tile.js"
+}

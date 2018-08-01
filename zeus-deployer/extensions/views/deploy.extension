@@ -1,5 +1,1 @@
-{
-	'description': 'Deploy view',
-	'extensionPoint': 'launchpad-Applications-view',
-	'module': 'zeus-deployer/views/Deploy/view.js'
-}
+{"description":"Deploy view","extensionPoint":"launchpad-zeus-Applications-view","module":"zeus-deployer/views/Deploy/view.js"}
