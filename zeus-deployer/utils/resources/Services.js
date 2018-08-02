@@ -7,16 +7,9 @@ exports.create = function(server, token, namespace, service) {
 	return api.create(service);
 };
 
-exports.delete = function(server, token, namespace, templateId, applicationName) {
-	var result = [];
-	var services = DeploymentDao.getServices(templateId);
-
-	for (var i = 0 ; i < services.length; i ++) {
-		var api = new ServicesApi(server, token, namespace);
-		var service = api.delete(applicationName + '-' + services[i].name);
-		result.push(service);
-	}
-	return result;
+exports.delete = function(server, token, namespace, name) {
+	var api = new ServicesApi(server, token, namespace);
+	return api.delete(name);
 };
 
 exports.build = function(entity) {

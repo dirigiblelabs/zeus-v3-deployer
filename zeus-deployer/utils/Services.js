@@ -18,6 +18,13 @@ exports.create = function(server, token, namespace, template, name) {
 	return services;
 };
 
-exports.delete = function(server, token, namespace, template, name) {
-    return api.delete(server, token, namespace, template, name);
+exports.delete = function(server, token, namespace, templateId, name) {
+    var result = [];
+	var services = dao.getServices(templateId);
+
+	for (var i = 0 ; i < services.length; i ++) {
+		var service = api.delete(server, token, namespace, name + '-' + services[i].name);
+		result.push(service);
+	}
+	return result;
 };
