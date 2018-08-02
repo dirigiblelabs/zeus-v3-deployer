@@ -19,14 +19,7 @@ exports.delete = function(server, token, namespace, templateId, applicationName)
 	return result;
 };
 
-var counter = 0;
-
 exports.build = function(entity) {
-	counter ++;
-	console.error('Building a Service!!! ---> ' + counter);
-	if (counter === 2) {
-		throw new Exception('It shouldn\'t be here!!!');
-	}
 	var builder = new ServiceBuilder();
 	builder.getMetadata().setName(entity.name);
 	builder.getMetadata().setNamespace(entity.namespace);
