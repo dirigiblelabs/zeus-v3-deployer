@@ -2,7 +2,7 @@ var dao = require('zeus-applications/data/dao/Explore/Applications');
 var DeploymentDao = require('zeus-deployer/data/dao/Deployments');
 
 var StatefulSets = require('zeus-deployer/utils/StatefulSets');
-var Deployments = require('zeus-deployer/utils/resources/Deployments');
+var Deployments = require('zeus-deployer/utils/Deployments');
 var Services = require('zeus-deployer/utils/Services');
 var Ingresses = require('zeus-deployer/utils/Ingresses');
 var Credentials = require('zeus-deployer/utils/Credentials');
@@ -19,7 +19,7 @@ exports.create = function(templateId, clusterId, name) {
 	if (template.isStateful) {
 		deployment = StatefulSets.create(credentials.server, credentials.token, credentials.namespace, template, name);
 	} else {
-		deployment = createDeployment(credentials.server, credentials.token, credentials.namespace, template, name);
+		deployment = Deployments.create(credentials.server, credentials.token, credentials.namespace, template, name);
 	}
 	var services = Services.create(credentials.server, credentials.token, credentials.namespace, template, name);
 	var ingresses = Ingresses.create(credentials.server, credentials.token, credentials.namespace, template, name);
@@ -40,43 +40,6 @@ exports.create = function(templateId, clusterId, name) {
 		'services': services
 	};
 };
-
-function createDeployment(server, token, namespace, template, name) {
-	var containers = DeploymentDao.getContainers(template.id);
-	var env = DeploymentDao.getVariables(template.id);
-
-	var entity = {
-		'name': name,
-        'namespace': namespace,
-        'application': name,
-        'replicas': template.replicas,
-		'containers': []
-	}
-	for (var i = 0 ; i < containers.length; i ++) {
-		containers[i].env = env;
-		entity.containers.push(buildContainer(containers[i]));
-	}
-	var deployment = Deployments.build(entity)
-	return Deployments.create(server, token, namespace, deployment);
-}
-
-function buildContainer(entity) {
-	var container = {
-		'name': entity.name,
-		'image': entity.image,
-		'ports': [{
-			'containerPort': entity.port
-		}],
-		'env': []
-	};
-	for (var i = 0; i < entity.env.length; i ++) {
-		container.env.push({
-			'name': entity.env[i].name,
-			'value': entity.env[i].value
-		});
-	}
-	return container;
-}
 
 exports.delete = function(applicationId) {
 	var application = dao.get(applicationId);

@@ -7,9 +7,9 @@ exports.create = function(server, token, namespace, deployment) {
 	return api.create(deployment);
 };
 
-exports.delete = function(server, token, namespace, applicationName) {
+exports.delete = function(server, token, namespace, name) {
 	var api = new DeploymentsApi(server, token, namespace);
-	return api.delete(applicationName);
+	return api.delete(name);
 };
 
 exports.build = function(entity) {
