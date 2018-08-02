@@ -45,5 +45,5 @@ exports.delete = function(server, token, namespace, templateId, applicationName)
 };
 
 function isIngress(service) {
-	return service.host !== null && service.path !== null;
+	return service.host != null && service.path != null;
 }
