@@ -2,7 +2,7 @@ var dao = require('zeus-applications/data/dao/Explore/Applications');
 var DeploymentDao = require('zeus-deployer/data/dao/Deployments');
 
 var StatefulSets = require('zeus-deployer/utils/StatefulSets');
-var Deployments = require('zeus-deployer/utils/Deployments');
+var Deployments = require('zeus-deployer/utils/resources/Deployments');
 var Services = require('zeus-deployer/utils/Services');
 var Ingresses = require('zeus-deployer/utils/Ingresses');
 var Credentials = require('zeus-deployer/utils/Credentials');
@@ -21,7 +21,7 @@ exports.create = function(templateId, clusterId, name) {
 	} else {
 		deployment = createDeployment(credentials.server, credentials.token, credentials.namespace, template, name);
 	}
-	var services = createServices(credentials.server, credentials.token, credentials.namespace, template, name);
+	var services = Services.create(credentials.server, credentials.token, credentials.namespace, template, name);
 	var ingresses = Ingresses.create(credentials.server, credentials.token, credentials.namespace, template, name);
 
 	var applicationId = dao.create({
@@ -76,23 +76,6 @@ function buildContainer(entity) {
 		});
 	}
 	return container;
-}
-
-function createServices(server, token, namespace, template, name) {
-	var services = [];
-	var templateServices = DeploymentDao.getServices(template.id);
-	for (var i = 0 ; i < templateServices.length ; i ++ ) {
-		var entity = Services.build({
-			'name': name + '-' + templateServices[i].name,
-			'namespace': namespace,
-			'application': name,
-			'type': templateServices[i].type,
-			'port': templateServices[i].port
-		});
-		var service = Services.create(server, token, namespace, entity);
-		services.push(service);
-	}
-	return services;
 }
 
 exports.delete = function(applicationId) {

@@ -1,55 +1,38 @@
-var IngressesApi = require('kubernetes/apis/extensions/v1beta1/Ingresses');
-var IngressBuilder = require('kubernetes/builders/apis/extensions/v1beta1/Ingress');
-var DeploymentDao = require('zeus-deployer/data/dao/Deployments');
+var dao = require('zeus-deployer/data/dao/Deployments');
+var api = require('zeus-deployer/utils/resources/Ingresses');
 
-exports.create = function(server, token, namespace, template, applicationName) {
-	var result = [];
-	var services = DeploymentDao.getServices(template.id);
-
-	var api = new IngressesApi(server, token, namespace);
+exports.create = function(server, token, namespace, template, name) {
+	var ingresses = [];
+	var services = dao.getServices(template.id);
 	for (var i = 0 ; i < services.length; i ++) {
 		if (isIngress(services[i])) {
-			var ingress = exports.build({
-				'name': applicationName + '-' + services[i].name,
+			var entity = api.build({
+				'name': name + '-' + services[i].name,
 				'namespace': namespace,
-				'application': applicationName,
+				'application': name,
 				'host': services[i].host,
 				'path': services[i].path,
-				'serviceName': applicationName + '-' + services[i].name,
+				'serviceName': name + '-' + services[i].name,
 				'servicePort': services[i].port
 			});
-			result.push(api.create(ingress));
+			var ingress = api.create(server, token, namespace, entity);
+			ingresses.push(ingress);
 		}
 	}
-	return result;
+	return ingresses;
 };
 
 exports.delete = function(server, token, namespace, templateId, applicationName) {
 	var result = [];
-	var services = DeploymentDao.getServices(templateId);
+	var services = dao.getServices(templateId);
 
 	for (var i = 0 ; i < services.length; i ++) {
 		if (isIngress(services[i])) {
-			var api = new IngressesApi(server, token, namespace);
-			var ingress = api.delete(applicationName + '-' + services[i].name);
+			var ingress = api.delete(server, token, namespace, applicationName + '-' + services[i].name);
 			result.push(ingress);
 		}
 	}
 	return result;
-};
-
-exports.build = function(entity) {
-	var builder = new IngressBuilder();
-	builder.getMetadata().setName(entity.name);
-	builder.getMetadata().setNamespace(entity.namespace);
-	builder.getMetadata().setLabels({
-		'zeus-application': entity.application
-	});
-	builder.getSpec().setHost(entity.host);
-	builder.getSpec().setPath(entity.path);
-	builder.getSpec().setServiceName(entity.serviceName);
-	builder.getSpec().setServicePort(entity.servicePort);
-	return builder.build();
 };
 
 function isIngress(service) {
