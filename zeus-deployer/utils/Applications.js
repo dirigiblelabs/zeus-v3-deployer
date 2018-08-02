@@ -9,7 +9,6 @@ var Credentials = require('zeus-deployer/utils/Credentials');
 var ApplicationContainers = require('zeus-deployer/utils/application/Containers');
 var ApplicationVariables = require('zeus-deployer/utils/application/Variables');
 var ApplicationServices = require('zeus-deployer/utils/application/Services');
-var ApplicationIngresses = require('zeus-deployer/utils/application/Ingresses');
 var ApplicationEndpoints = require('zeus-deployer/utils/application/Endpoints');
 
 exports.create = function(templateId, clusterId, name) {
