@@ -21,7 +21,7 @@ exports.create = function(templateId, clusterId, name) {
 	} else {
 		deployment = Deployments.create(credentials.server, credentials.token, credentials.namespace, template, name);
 	}
-	var services = Services.create(credentials.server, credentials.token, credentials.namespace, template, name);
+	var services = createServices(credentials.server, credentials.token, credentials.namespace, template, name);
 	var ingresses = Ingresses.create(credentials.server, credentials.token, credentials.namespace, template, name);
 
 	var applicationId = dao.create({
@@ -40,6 +40,23 @@ exports.create = function(templateId, clusterId, name) {
 		'services': services
 	};
 };
+
+function createServices(server, token, namespace, template, name) {
+	var services = [];
+	var templateServices = DeploymentDao.getServices(template.id);
+	for (var i = 0 ; i < templateServices.length ; i ++ ) {
+		var entity = Services.build({
+			'name': name + '-' + templateServices[i].name,
+			'namespace': namespace,
+			'application': name,
+			'type': templateServices[i].type,
+			'port': templateServices[i].port
+		});
+		var service = Services.create(server, token, namespace, entity);
+		services.push(service);
+	}
+	return services;
+}
 
 exports.delete = function(applicationId) {
 	var application = dao.get(applicationId);

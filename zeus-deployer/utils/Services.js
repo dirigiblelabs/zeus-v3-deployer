@@ -1,31 +1,10 @@
 var ServicesApi = require('kubernetes/api/v1/Services');
+var ServiceBuilder = require('kubernetes/builders/api/v1/Service');
 var DeploymentDao = require('zeus-deployer/data/dao/Deployments');
 
-exports.create = function(server, token, namespace, template, applicationName) {
-	var result = [];
-	var services = DeploymentDao.getServices(template.id);
-
-	for (var i = 0 ; i < services.length; i ++) {
-		var api = new ServicesApi(server, token, namespace);
-	
-		var builder = api.getEntityBuilder();
-	
-		builder.getMetadata().setNamespace(namespace);
-	
-		builder.getMetadata().setName(applicationName + '-' + services[i].name);
-		builder.getMetadata().setLabels({
-			'zeus-application': applicationName
-		});
-	
-		builder.getSpec().setType(services[i].type);
-		builder.getSpec().addPort({
-			'port': services[i].port
-		});
-		
-		var entity = builder.build();
-		result.push(api.create(entity));
-	}
-	return result;
+exports.create = function(server, token, namespace, service) {
+	var api = new ServicesApi(server, token, namespace);
+	return api.create(service);
 };
 
 exports.delete = function(server, token, namespace, templateId, applicationName) {
@@ -38,4 +17,27 @@ exports.delete = function(server, token, namespace, templateId, applicationName)
 		result.push(service);
 	}
 	return result;
+};
+
+var counter = 0;
+
+exports.build = function(entity) {
+	counter ++;
+	console.error('Building a Service!!! ---> ' + counter);
+	if (counter === 2) {
+		throw new Exception('It shouldn\'t be here!!!');
+	}
+	var builder = new ServiceBuilder();
+	builder.getMetadata().setName(entity.name);
+	builder.getMetadata().setNamespace(entity.namespace);
+	builder.getMetadata().setLabels({
+		'zeus-application': entity.application
+	});
+	builder.getSpec().setType(entity.type);
+	builder.getSpec().addPort({
+		'port': entity.port,
+		'targetPort': 8080
+	});
+
+	return builder.build();
 };
