@@ -19,7 +19,7 @@ exports.create = function(templateId, clusterId, name) {
 	if (template.isStateful) {
 		deployment = StatefulSets.create(credentials.server, credentials.token, credentials.namespace, template, name);
 	} else {
-		deployment = Deployments.create(credentials.server, credentials.token, credentials.namespace, template, name);
+		deployment = createDeployment(credentials.server, credentials.token, credentials.namespace, template, name);
 	}
 	var services = createServices(credentials.server, credentials.token, credentials.namespace, template, name);
 	var ingresses = Ingresses.create(credentials.server, credentials.token, credentials.namespace, template, name);
@@ -40,6 +40,43 @@ exports.create = function(templateId, clusterId, name) {
 		'services': services
 	};
 };
+
+function createDeployment(server, token, namespace, template, name) {
+	var containers = DeploymentDao.getContainers(template.id);
+	var env = DeploymentDao.getVariables(template.id);
+
+	var entity = {
+		'name': name,
+        'namespace': namespace,
+        'application': name,
+        'replicas': template.replicas,
+		'containers': []
+	}
+	for (var i = 0 ; i < containers.length; i ++) {
+		containers[i].env = env;
+		entity.containers.push(buildContainer(containers[i]));
+	}
+	var deployment = Deployments.build(entity)
+	return Deployments.create(server, token, namespace, deployment);
+}
+
+function buildContainer(entity) {
+	var container = {
+		'name': entity.name,
+		'image': entity.image,
+		'ports': [{
+			'containerPort': entity.port
+		}],
+		'env': []
+	};
+	for (var i = 0; i < entity.env.length; i ++) {
+		container.env.push({
+			'name': entity.env[i].name,
+			'value': entity.env[i].value
+		});
+	}
+	return container;
+}
 
 function createServices(server, token, namespace, template, name) {
 	var services = [];
