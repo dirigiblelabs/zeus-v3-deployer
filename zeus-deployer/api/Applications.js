@@ -1,5 +1,4 @@
 var rs = require('http/v3/rs');
-
 var Applications = require('zeus-deployer/utils/Applications');
 
 rs.service()
