@@ -20,6 +20,7 @@ rs.service()
             result.service = create(credentials, Services, application.service);
             result.ingress = create(credentials, Ingresses, application.ingress);
 
+            // TODO: Create Application Entry!
             // var name = application.settings.applicationName;
             // var templateId = -1;
             // var clusterId = application.settings.clusterId;
@@ -43,16 +44,14 @@ rs.service()
 		})
 	.resource('{id}')
 		.delete(function(ctx, request, response) {
-            // TODO
+            // TODO: Delete Resources
 		})
 .execute();
 
 
 function create(credentials, api, entity) {
-    console.warn('Credentials: ' + JSON.stringify(credentials));
-    console.warn('API: ' + JSON.stringify(api));
-    console.warn('Entity: ' + JSON.stringify(entity));
     if (entity) {
+        entity.namespace = credentials.namespace;
         var resource = api.build(entity);
         return api.create(credentials.server, credentials.token, credentials.namespace, resource);
     }
