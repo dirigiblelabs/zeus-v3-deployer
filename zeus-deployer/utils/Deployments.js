@@ -31,13 +31,7 @@ function buildContainer(entity) {
 		'ports': [{
 			'containerPort': entity.port
 		}],
-		'env': []
+		'env': entity.env
 	};
-	for (var i = 0; i < entity.env.length; i ++) {
-		container.env.push({
-			'name': entity.env[i].name,
-			'value': entity.env[i].value
-		});
-	}
 	return container;
 }
