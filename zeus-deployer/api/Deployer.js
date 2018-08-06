@@ -1,9 +1,6 @@
 var response = require('http/v3/response');
 var Credentials = require('zeus-deployer/utils/Credentials');
-var Deployments = require('zeus-deployer/utils/resources/Deployments');
-var StatefulSets = require('zeus-deployer/utils/resources/StatefulSets');
-var Services = require('zeus-deployer/utils/resources/Services');
-var Ingresses = require('zeus-deployer/utils/resources/Ingresses');
+var Manager = require('zeus-deployer/utils/Manager');
 var Applications = require('zeus-deployer/utils/application/Applications');
 
 var rs = require('http/v3/rs');
@@ -15,10 +12,10 @@ rs.service()
 			var application = request.getJSON();
             var credentials = Credentials.getCredentials(application.settings.clusterId);
 
-            result.deployment = createResource(credentials, Deployments, application.deployment);
-            result.statefulSet = createResource(credentials, StatefulSets, application.statefulSet);
-            result.service = createResource(credentials, Services, application.service);
-            result.ingress = createResource(credentials, Ingresses, application.ingress);
+            result.deployment = Manager.createDeployment(credentials, application.deployment);
+            result.statefulSet = Manager.createStatefulSet(credentials, application.statefulSet);
+            result.service = Manager.createService(credentials, application.service);
+            result.ingress = Manager.createIngress(credentials, application.ingress);
 
             // TODO: Create Application Entry!
             // var name = application.settings.applicationName;
@@ -52,26 +49,11 @@ rs.service()
             var ingressName = request.getParameter('ingressName');
             var credentials = Credentials.getCredentials(clusterId);
 
-            result.deployment = deleteResource(credentials, Deployments, deploymentName);
-            result.statefulSet = deleteResource(credentials, StatefulSets, statefulSetName);
-            result.service = deleteResource(credentials, Services, serviceName);
-            result.ingress = deleteResource(credentials, Ingresses, ingressName);
+            result.deployment = Manager.deleteDeployment(credentials, deploymentName);
+            result.statefulSet = Manager.deleteStatefulSet(credentials, statefulSetName);
+            result.service = Manager.deleteService(credentials, serviceName);
+            result.ingress = Manager.deleteIngress(credentials, ingressName);
 
             response.println(JSON.stringify(result));
 		})
 .execute();
-
-
-function createResource(credentials, api, entity) {
-    if (entity) {
-        entity.namespace = credentials.namespace;
-        var resource = api.build(entity);
-        return api.create(credentials.server, credentials.token, credentials.namespace, resource);
-    }
-}
-
-function deleteResource(credentials, api, name) {
-    if (name) {
-        return api.delete(credentials.server, credentials.token, credentials.namespace, name);
-    }
-}
