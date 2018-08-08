@@ -16,7 +16,7 @@ exports.createService = function(credentials, service) {
 };
 
 exports.createIngress = function(credentials, ingress) {
-    return createIngress(credentials, Ingresses, ingress);
+    return createResource(credentials, Ingresses, ingress);
 };
 
 exports.deleteDeployment = function(credentials, name) {
@@ -28,11 +28,11 @@ exports.deleteStatefulSet = function(credentials, name) {
 };
 
 exports.deleteService = function(credentials, name) {
-    return createResource(credentials, Services, name);
+    return deleteResource(credentials, Services, name);
 };
 
 exports.deleteIngress = function(credentials, name) {
-    return createIngress(credentials, Ingresses, name);
+    return deleteResource(credentials, Ingresses, name);
 };
 
 function createResource(credentials, api, entity) {
