@@ -22,7 +22,7 @@ exports.build = function(entity) {
 	builder.getSpec().setType(entity.type);
 	builder.getSpec().addPort({
 		'port': entity.port,
-		'targetPort': 8080
+		'targetPort': entity.port
 	});
 
 	return builder.build();
