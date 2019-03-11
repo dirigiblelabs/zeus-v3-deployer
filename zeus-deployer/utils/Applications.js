@@ -18,7 +18,7 @@ exports.create = function(templateId, clusterId, name) {
 		deployment = Deployments.create(credentials.server, credentials.token, credentials.namespace, template, name);
 	}
 	var services = Services.create(credentials.server, credentials.token, credentials.namespace, template, name);
-	var ingresses = Ingresses.create(credentials.server, credentials.token, credentials.namespace, template, name);
+	var ingresses = Ingresses.create(credentials.server, credentials.token, credentials.namespace, template, name, credentials.ingress);
 
 	Applications.create({
 		'name': name,

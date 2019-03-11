@@ -1,7 +1,7 @@
 var dao = require('zeus-deployer/data/dao/Deployments');
 var api = require('zeus-deployer/utils/resources/Ingresses');
 
-exports.create = function(server, token, namespace, template, name) {
+exports.create = function(server, token, namespace, template, name, ingressHost) {
 	var ingresses = [];
 	var services = dao.getServices(template.id);
 	for (var i = 0 ; i < services.length; i ++) {
@@ -10,7 +10,7 @@ exports.create = function(server, token, namespace, template, name) {
 				'name': name + '-' + services[i].name,
 				'namespace': namespace,
 				'application': name,
-				'host': services[i].host,
+				'host': name + '.' + ingressHost,
 				'path': services[i].path,
 				'serviceName': name + '-' + services[i].name,
 				'servicePort': services[i].port
@@ -36,5 +36,5 @@ exports.delete = function(server, token, namespace, templateId, applicationName)
 };
 
 function isIngress(service) {
-	return service.host != null && service.path != null;
+	return service.type === "Ingress";
 }

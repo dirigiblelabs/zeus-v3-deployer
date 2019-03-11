@@ -9,7 +9,7 @@ exports.create = function(server, token, namespace, template, name) {
 			'name': name + '-' + templateServices[i].name,
 			'namespace': namespace,
 			'application': name,
-			'type': templateServices[i].type,
+			'type': getServiceType(templateServices[i].type),
 			'port': templateServices[i].port
 		});
 		var service = api.create(server, token, namespace, entity);
@@ -28,3 +28,7 @@ exports.delete = function(server, token, namespace, templateId, name) {
 	}
 	return result;
 };
+
+function getServiceType(type) {
+	return type === "Ingress" ? "ClusterIP" : type;
+}

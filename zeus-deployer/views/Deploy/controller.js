@@ -15,16 +15,16 @@ angular.module('page')
 		message: message,
 		on: on,
 		onClusterModified: function(callback) {
-			on('zeus.zeus-accounts.Clusters.modified', callback);
+			on('zeus.Deliver.Clusters.modified', callback);
 		},
 		onTemplateModified: function(callback) {
-			on('zeus.zeus-templates.Templates.modified', callback);
+			on('zeus.Build.Templates.modified', callback);
 		}, 
 		messageEntityModified: function() {
 			message('modified');
 		},
 		messageApplicationsRefresh: function() {
-			messageHub.post({data: null}, 'zeus.zeus-applications.Applications.refresh');
+			messageHub.post({data: null}, 'zeus.Explore.Applications.refresh');
 		}
 	};
 }])

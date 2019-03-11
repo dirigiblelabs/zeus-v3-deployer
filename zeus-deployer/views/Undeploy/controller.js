@@ -4,7 +4,7 @@ angular.module('page')
 	var messageHub = new FramesMessageHub();
 
 	var message = function(evtName, data){
-		messageHub.post({data: data}, 'zeus.zeus-deployer.Applications.' + evtName);
+		messageHub.post({data: data}, 'zeus.Explore.Applications.' + evtName);
 	};
 
 	var on = function(topic, callback){
@@ -15,25 +15,25 @@ angular.module('page')
 		message: message,
 		on: on,
 		onApplicationRefresh: function(callback) {
-			on('zeus.zeus-applications.Applications.refresh', callback);
+			on('zeus.Explore.Applications.refresh', callback);
 		},
 		messageEntityModified: function() {
 			message('modified');
 		},
 		messageApplicationsRefresh: function() {
-			messageHub.post({data: null}, 'zeus.zeus-applications.Applications.refresh');
+			messageHub.post({data: null}, 'zeus.Explore.Applications.refresh');
 		},
 		messageContainersRefresh: function() {
-			messageHub.post({data: null}, 'zeus.zeus-applications.Containers.refresh');
+			messageHub.post({data: null}, 'zeus.Explore.Containers.refresh');
 		},
 		messageServicesRefresh: function() {
-			messageHub.post({data: null}, 'zeus.zeus-applications.Services.refresh');
+			messageHub.post({data: null}, 'zeus.Explore.Services.refresh');
 		},
 		messageEndpointsRefresh: function() {
-			messageHub.post({data: null}, 'zeus.zeus-applications.Endpoints.refresh');
+			messageHub.post({data: null}, 'zeus.Explore.Endpoints.refresh');
 		},
 		messageVariablesRefresh: function() {
-			messageHub.post({data: null}, 'zeus.zeus-applications.Variables.refresh');
+			messageHub.post({data: null}, 'zeus.Explore.Variables.refresh');
 		}
 	};
 }])
