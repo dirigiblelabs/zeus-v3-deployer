@@ -1,4 +1,4 @@
-var query = require('db/v3/query');
+var query = require('db/v4/query');
 
 var GET_TEMPLATE = 'select * from ZEUS_TEMPLATES where TEMPLATE_ID = ?';
 

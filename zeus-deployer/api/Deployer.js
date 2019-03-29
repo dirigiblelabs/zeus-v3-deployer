@@ -1,4 +1,4 @@
-var response = require('http/v3/response');
+var response = require('http/v4/response');
 var Credentials = require('zeus-deployer/utils/Credentials');
 var Manager = require('zeus-deployer/utils/Manager');
 var Applications = require('zeus-deployer/utils/application/Applications');
