@@ -2,6 +2,7 @@ var dao = require('zeus-deployer/data/dao/Deployments');
 var api = require('zeus-deployer/utils/resources/Deployments');
 
 exports.create = function(server, token, namespace, template, name) {
+	console.log("Template: " + JSON.stringify(template));
 	var containers = dao.getContainers(template.id);
 	var env = dao.getVariables(template.id);
 

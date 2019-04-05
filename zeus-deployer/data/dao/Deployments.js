@@ -1,18 +1,18 @@
 var query = require('db/v4/query');
 
-var GET_TEMPLATE = 'select * from ZEUS_TEMPLATES where TEMPLATE_ID = ?';
+var GET_TEMPLATE = 'select * from zeus_templates where template_id = ?';
 
-var GET_CONTAINERS = 'select * from ZEUS_TEMPLATE_CONTAINERS '
-	+ 'join ZEUS_CONTAINERS on TEMPLATE_CONTAINER_CONTAINER = CONTAINER_ID '
-	+ 'join ZEUS_CONTAINER_PROTOCOLS on CONTAINER_PROTOCOL = CONTAINER_PROTOCOL_ID '
-	+ 'where TEMPLATE_CONTAINER_TEMPLATE = ?';
+var GET_CONTAINERS = 'select * from zeus_template_containers '
+	+ 'join zeus_containers on template_container_container = container_id '
+	+ 'join zeus_container_protocols on container_protocol = container_protocol_id '
+	+ 'where template_container_template = ?';
 
-var GET_SERVICES = 'select * from ZEUS_TEMPLATE_SERVICES '
-	+ 'join ZEUS_TEMPLATE_SERVICE_TYPES on TEMPLATE_SERVICE_TYPE = SERVICE_TYPE_ID '
-	+ 'where TEMPLATE_SERVICE_TEMPLATE = ?';
+var GET_SERVICES = 'select * from zeus_template_services '
+	+ 'join zeus_template_service_types on template_service_type = service_type_id '
+	+ 'where template_service_template = ?';
 
-var GET_VARIABLES = 'select * from ZEUS_TEMPLATE_VARIABLES '
-	+ 'where TEMPLATE_VARIABLE_TEMPLATE = ?';
+var GET_VARIABLES = 'select * from zeus_template_variables '
+	+ 'where template_variable_template = ?';
 
 exports.getTemplate = function(templateId) {
 	var template = query.execute(GET_TEMPLATE, [{
@@ -22,10 +22,10 @@ exports.getTemplate = function(templateId) {
 
 	return {
 		'id': templateId,
-		'name': template[0].TEMPLATE_NAME,
-		'replicas': template[0].TEMPLATE_REPLICAS,
-		'isStateful': template[0].TEMPLATE_IS_STATEFUL,
-		'mountPath': template[0].TEMPLATE_MOUNT_PATH
+		'name': template[0].template_name,
+		'replicas': template[0].template_replicas,
+		'isStateful': template[0].template_is_stateful,
+		'mountPath': template[0].template_mount_path
 	};
 };
 
@@ -37,10 +37,10 @@ exports.getContainers = function(templateId) {
 
 	containers = containers.map(function(next) {
 		return {
-			'name': next.CONTAINER_NAME,
-			'image': next.CONTAINER_IMAGE,
-			'port': next.CONTAINER_PORT,
-			'protocol': next.CONTAINER_NAME
+			'name': next.container_name,
+			'image': next.container_image,
+			'port': next.container_port,
+			'protocol': next.container_name
 		};
 	});
 	return containers;
@@ -54,11 +54,11 @@ exports.getServices = function(templateId) {
 
 	services = services.map(function(next) {
 		return {
-			'name': next.TEMPLATE_SERVICE_NAME,
-			'type': next.SERVICE_TYPE_NAME,
-			'port': next.TEMPLATE_SERVICE_PORT,
-			'host': next.TEMPLATE_SERVICE_HOST,
-			'path': next.TEMPLATE_SERVICE_PATH
+			'name': next.template_service_name,
+			'type': next.service_type_name,
+			'port': next.template_service_port,
+			'host': next.template_service_host,
+			'path': next.template_service_path
 		};
 	});
 	return services;
@@ -72,8 +72,8 @@ exports.getVariables = function(templateId) {
 
 	variables = variables.map(function(next) {
 		return {
-			'name': next.TEMPLATE_VARIABLE_NAME,
-			'value': next.TEMPLATE_VARIABLE_VALUE
+			'name': next.template_variable_name,
+			'value': next.template_variable_value
 		};
 	});
 	return variables;
