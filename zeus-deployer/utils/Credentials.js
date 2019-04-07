@@ -1,4 +1,4 @@
-var Clusters = require('zeus-accounts/data/dao/Deliver/Clusters');
+var Clusters = require("zeus-accounts/data/dao/Deliver/Clusters");
 
 exports.getCredentials = function(clusterId) {
 	var cluster = Clusters.get(clusterId);
@@ -12,9 +12,10 @@ exports.getDefaultCredentials = function() {
 
 function getClusterCredentials(cluster) {
 	return {
-		'server': cluster.API,
-		'ingress': cluster.Ingress,
-		'token': cluster.Token,
-		'namespace': 'zeus'
+		id: cluster.Id,
+		server: cluster.API,
+		ingress: cluster.Ingress,
+		token: cluster.Token,
+		namespace: "zeus"
 	};
 }
