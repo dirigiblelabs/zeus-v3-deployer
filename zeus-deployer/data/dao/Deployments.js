@@ -94,7 +94,7 @@ exports.getConfigMaps = function(templateId) {
 			name: next.name,
 			key: next.key,
 			mountPath: next.mountpath,
-			data: data
+			data: next.data
 		};
 	});
 	return configMaps;
