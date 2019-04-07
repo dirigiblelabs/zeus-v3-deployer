@@ -1,15 +1,16 @@
-var dao = require('zeus-deployer/data/dao/Deployments');
-var api = require('zeus-deployer/utils/resources/StatefulSets');
+var dao = require("zeus-deployer/data/dao/Deployments");
+var api = require("zeus-deployer/utils/resources/StatefulSets");
 
 exports.create = function(server, token, namespace, template, name) {
 	var entity = {
-		'name': name,
-		'namespace': namespace,
-		'application': name,
-		'replicas': template.replicas,
-		'serviceName': name + '-' + dao.getServices(template.id)[0].name,
-		'storage': '1Gi',
-		'containers': []
+		name: name,
+		namespace: namespace,
+		application: name,
+		replicas: template.replicas,
+		serviceName: name + "-" + dao.getServices(template.id)[0].name,
+		storage: "1Gi",
+		containers: [],
+		configMaps: configMaps
 	};
 	addContainers(entity, template);
 
@@ -22,16 +23,17 @@ exports.delete = function(server, token, namespace, name) {
 };
 
 function addContainers(entity, template) {
+	var configMaps = dao.getConfigMaps(template.id);
 	var containers = dao.getContainers(template.id);
 	var env = dao.getVariables(template.id);
 	for (var i = 0 ; i < containers.length; i ++) {
-		var container = {
-			'name': containers[i].name,
-			'image': containers[i].image,
-			'port': containers[i].port,
-			'mountPath': template.mountPath,
-			'env': env
-		};
-		entity.containers.push(container);
+		entity.containers.push({
+			name: containers[i].name,
+			image: containers[i].image,
+			port: containers[i].port,
+			mountPath: template.mountPath,
+			env: env,
+			configMaps: configMaps
+		});
 	}
 }
