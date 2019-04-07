@@ -28,7 +28,8 @@ exports.getTemplate = function(templateId) {
 		name: template[0].template_name,
 		replicas: template[0].template_replicas,
 		isStateful: template[0].template_is_stateful,
-		mountPath: template[0].template_mount_path
+		mountPath: template[0].template_mount_path,
+		mountConfigMaps: template[0].template_mount_configmaps
 	};
 };
 
