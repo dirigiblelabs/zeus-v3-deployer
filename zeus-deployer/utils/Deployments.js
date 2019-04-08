@@ -53,7 +53,7 @@ function buildContainers(entity) {
 			}],
 			env: []
 		};
-		for (var j = 0; j < entity.env && entity.env.length; j ++) {
+		for (var j = 0; entity.env && j < entity.env.length; j ++) {
 			var env = entity.env[j];
 			container.env.push({
 				name: env.name,
@@ -61,7 +61,7 @@ function buildContainers(entity) {
 			});
 		}
 		container.volumeMounts = [];
-		for (var k = 0; k < entity.configMaps && entity.configMaps.length; k ++) {
+		for (var k = 0; entity.configMaps && k < entity.configMaps.length; k ++) {
 			var configMap = entity.configMaps[k];
 			container.volumeMounts.push({
 				name: "config-volume-" + configMap.name,
