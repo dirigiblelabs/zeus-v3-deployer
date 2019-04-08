@@ -51,12 +51,13 @@ exports.delete = function(applicationId) {
 	}
 	var services = Services.delete(credentials.server, credentials.token, credentials.namespace, application.Template, application.Name);
 	var ingresses = Ingresses.delete(credentials.server, credentials.token, credentials.namespace, application.Template, application.Name);
-
+	var configMaps = ConfigMaps.delete(credentials.server, credentials.token, credentials.namespace, application.Template, application.Name);
 	Applications.delete(applicationId);
 
 	return {
 		deployment: deployment,
 		services: services,
-		ingresses: ingresses
+		ingresses: ingresses,
+		configMaps: configMaps
 	};
 };

@@ -21,11 +21,11 @@ exports.create = function(server, token, namespace, template, name) {
 
 exports.delete = function(server, token, namespace, templateId, applicationName) {
 	var result = [];
-	var configs = dao.getConfigMaps(template.id);
+	var configs = dao.getConfigMaps(templateId);
 
 	for (var i = 0 ; i < configs.length; i ++) {
-        var config = api.delete(server, token, namespace, applicationName + "-" + configs[i].name);
-        result.push(config);
+		var config = api.delete(server, token, namespace, applicationName + "-" + configs[i].name);
+		result.push(config);
 	}
 	return result;
 };

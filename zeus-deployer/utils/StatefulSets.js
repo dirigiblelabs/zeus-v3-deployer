@@ -1,8 +1,8 @@
 var dao = require("zeus-deployer/data/dao/Deployments");
-var api = require("zeus-deployer/utils/resources/StatefulSets");
+var StatefulSetsApi = require("kubernetes/apis/apps/v1/StatefulSets");
+var StatefulSetBuilder = require("kubernetes/builders/apis/apps/v1/StatefulSet");
 
 exports.create = function(server, token, namespace, template, name) {
-	var configMaps = dao.getConfigMaps(template.id);
 	var entity = {
 		name: name,
 		namespace: namespace,
@@ -10,30 +10,59 @@ exports.create = function(server, token, namespace, template, name) {
 		replicas: template.replicas,
 		serviceName: name + "-" + dao.getServices(template.id)[0].name,
 		storage: "1Gi",
-		containers: [],
-		configMaps: configMaps
+		mountPath: template.mountPath,
+		containers: dao.getContainers(template.id),
+		env: dao.getVariables(template.id)
 	};
-	addContainers(entity, template);
 
-	var statefulSet = api.build(entity);
-	return api.create(server, token, namespace, statefulSet);
+	var statefulSet = this.build(entity);
+	var api = new StatefulSetsApi(server, token, namespace);
+	return api.create(statefulSet);
 };
 
 exports.delete = function(server, token, namespace, name) {
-	return api.delete(server, token, namespace, name);
+	var api = new StatefulSetsApi(server, token, namespace);
+	return api.delete(name);
 };
 
-function addContainers(entity, template) {
-	var containers = dao.getContainers(template.id);
-	var env = dao.getVariables(template.id);
-	for (var i = 0 ; i < containers.length; i ++) {
-		entity.containers.push({
-			name: containers[i].name,
-			image: containers[i].image,
-			port: containers[i].port,
-			mountPath: template.mountPath,
-			env: env,
-			configMaps: entity.configMaps
-		});
+exports.build = function(entity) {
+	var builder = new StatefulSetBuilder();
+	builder.getMetadata().setName(entity.name);
+	builder.getMetadata().setNamespace(entity.namespace);
+	builder.getMetadata().setLabels({
+		"zeus-application": entity.application
+	});
+	builder.setStorage(entity.storage);
+	builder.getSpec().setServiceName(entity.serviceName);
+	builder.getSpec().setReplicas(entity.replicas);
+    builder.getSpec().getTemplate().getSpec().setContainers(buildContainers(entity));
+
+	return builder.build();
+};
+
+function buildContainers(entity) {
+    var containers = [];
+	for (var i = 0 ; i < entity.containers.length; i ++) {
+		var container = {
+			name: entity.containers[i].name,
+			image: entity.containers[i].image,
+			ports: [{
+				containerPort: entity.containers[i].port
+			}],
+            volumeMounts: [{
+                name: "root",
+                mountPath: entity.mountPath
+            }],
+			env: []
+		};
+		for (var j = 0; j < entity.env.length; j ++) {
+			var env = entity.env[j];
+			container.env.push({
+				name: env.name,
+				value: env.value
+			});
+		}
+        containers.push(container);
 	}
+    return containers;
 }

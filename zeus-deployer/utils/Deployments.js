@@ -3,22 +3,17 @@ var DeploymentsApi = require("kubernetes/apis/apps/v1/Deployments");
 var DeploymentBuilder = require("kubernetes/builders/apis/apps/v1/Deployment");
 
 exports.create = function(server, token, namespace, template, name) {
-	var configMaps = dao.getConfigMaps(template.id);
-	var containers = dao.getContainers(template.id);
-	var env = dao.getVariables(template.id);
 	var entity = {
 		name: name,
         namespace: namespace,
         application: name,
         replicas: template.replicas,
-		containers: containers,
-		configMaps: configMaps,
-		env: env
+		containers: dao.getContainers(template.id),
+		configMaps: dao.getConfigMaps(template.id),
+		env: dao.getVariables(template.id)
 	};
 
 	var deployment = this.build(entity);
-
-	console.log("utils/Deployment.js: " + JSON.stringify(deployment));
 
 	var api = new DeploymentsApi(server, token, namespace);
 	return api.create(deployment);
@@ -42,23 +37,6 @@ exports.build = function(entity) {
 
 	return builder.build();
 };
-
-function buildVolumes(entity) {
-	var volumes = [];
-	for (var i = 0; i < entity.configMaps.length; i ++) {
-		volumes.push({
-			name: "config-volume-" + entity.configMaps[i].name,
-			configMap: {
-				name: entity.name + "-" + entity.configMaps[i].name,
-				items: [{
-					key: entity.configMaps[i].key,
-					path: entity.configMaps[i].key
-				}]
-			}
-		});
-	}
-	return volumes;
-}
 
 function buildContainers(entity) {
     var containers = [];
@@ -90,4 +68,21 @@ function buildContainers(entity) {
         containers.push(container);
 	}
     return containers;
+}
+
+function buildVolumes(entity) {
+	var volumes = [];
+	for (var i = 0; i < entity.configMaps.length; i ++) {
+		volumes.push({
+			name: "config-volume-" + entity.configMaps[i].name,
+			configMap: {
+				name: entity.name + "-" + entity.configMaps[i].name,
+				items: [{
+					key: entity.configMaps[i].key,
+					path: entity.configMaps[i].key
+				}]
+			}
+		});
+	}
+	return volumes;
 }
