@@ -2,6 +2,7 @@ var dao = require("zeus-deployer/data/dao/Deployments");
 var api = require("zeus-deployer/utils/resources/StatefulSets");
 
 exports.create = function(server, token, namespace, template, name) {
+	var configMaps = dao.getConfigMaps(template.id);
 	var entity = {
 		name: name,
 		namespace: namespace,
@@ -23,7 +24,6 @@ exports.delete = function(server, token, namespace, name) {
 };
 
 function addContainers(entity, template) {
-	var configMaps = dao.getConfigMaps(template.id);
 	var containers = dao.getContainers(template.id);
 	var env = dao.getVariables(template.id);
 	for (var i = 0 ; i < containers.length; i ++) {
@@ -33,7 +33,7 @@ function addContainers(entity, template) {
 			port: containers[i].port,
 			mountPath: template.mountPath,
 			env: env,
-			configMaps: configMaps
+			configMaps: entity.configMaps
 		});
 	}
 }

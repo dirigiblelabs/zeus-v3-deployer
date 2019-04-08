@@ -1,6 +1,5 @@
 var DeploymentsApi = require("kubernetes/apis/apps/v1/Deployments");
 var DeploymentBuilder = require("kubernetes/builders/apis/apps/v1/Deployment");
-var DeploymentDao = require("zeus-deployer/data/dao/Deployments");
 
 exports.create = function(server, token, namespace, deployment) {
 	var api = new DeploymentsApi(server, token, namespace);
@@ -26,6 +25,18 @@ exports.build = function(entity) {
         builder.getSpec().getTemplate().getSpec().addContainer(containers[i]);
     }
 
+	for (var i = 0; i < entity.configMaps.length; i ++) {
+		builder.getSpec().getTemplate().getSpec().addVolume({
+			name: "config-volume-" + entity.configMaps[i].name,
+			configMap: {
+				name: "httpd",
+				items: [{
+					key: "httpd",
+					path: "httpd"
+				}]
+			}
+		});
+	}
 	return builder.build();
 };
 
