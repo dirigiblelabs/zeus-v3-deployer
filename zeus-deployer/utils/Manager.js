@@ -1,7 +1,7 @@
-var Deployments = require('zeus-deployer/utils/resources/Deployments');
-var StatefulSets = require('zeus-deployer/utils/resources/StatefulSets');
-var Services = require('zeus-deployer/utils/resources/Services');
-var Ingresses = require('zeus-deployer/utils/resources/Ingresses');
+var Deployments = require("zeus-deployer/utils/Deployments");
+var StatefulSets = require("zeus-deployer/utils/StatefulSets");
+var Services = require("zeus-deployer/utils/resources/Services");
+var Ingresses = require("zeus-deployer/utils/resources/Ingresses");
 
 exports.createDeployment = function(credentials, deployment) {
     return createResource(credentials, Deployments, deployment);
