@@ -4,7 +4,8 @@ var Services = require("zeus-deployer/utils/resources/Services");
 var Ingresses = require("zeus-deployer/utils/resources/Ingresses");
 
 exports.createDeployment = function(credentials, deployment) {
-    return createResource(credentials, Deployments, deployment);
+    var api = getApi(credentials, Deployments);
+    return api.create(Deployments.build(deployment));
 };
 
 exports.createStatefulSet = function(credentials, statefulSet) {
@@ -34,6 +35,10 @@ exports.deleteService = function(credentials, name) {
 exports.deleteIngress = function(credentials, name) {
     return deleteResource(credentials, Ingresses, name);
 };
+
+function getApi(credentials, api) {
+    return api.getApi(credentials);
+}
 
 function createResource(credentials, api, entity) {
     if (entity) {

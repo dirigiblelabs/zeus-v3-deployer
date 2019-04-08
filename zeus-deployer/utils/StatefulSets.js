@@ -55,7 +55,7 @@ function buildContainers(entity) {
             }],
 			env: []
 		};
-		for (var j = 0; j < entity.env.length; j ++) {
+		for (var j = 0; j < entity.env && entity.env.length; j ++) {
 			var env = entity.env[j];
 			container.env.push({
 				name: env.name,

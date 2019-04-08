@@ -2,6 +2,10 @@ var dao = require("zeus-deployer/data/dao/Deployments");
 var DeploymentsApi = require("kubernetes/apis/apps/v1/Deployments");
 var DeploymentBuilder = require("kubernetes/builders/apis/apps/v1/Deployment");
 
+exports.getApi = function(credentials) {
+	return new DeploymentsApi(credentials.server, credentials.token, credentials.namespace);
+};
+
 exports.create = function(server, token, namespace, template, name) {
 	var entity = {
 		name: name,
@@ -49,7 +53,7 @@ function buildContainers(entity) {
 			}],
 			env: []
 		};
-		for (var j = 0; j < entity.env.length; j ++) {
+		for (var j = 0; j < entity.env && entity.env.length; j ++) {
 			var env = entity.env[j];
 			container.env.push({
 				name: env.name,
@@ -57,7 +61,7 @@ function buildContainers(entity) {
 			});
 		}
 		container.volumeMounts = [];
-		for (var k = 0; k < entity.configMaps.length; k ++) {
+		for (var k = 0; k < entity.configMaps && entity.configMaps.length; k ++) {
 			var configMap = entity.configMaps[k];
 			container.volumeMounts.push({
 				name: "config-volume-" + configMap.name,
@@ -72,7 +76,7 @@ function buildContainers(entity) {
 
 function buildVolumes(entity) {
 	var volumes = [];
-	for (var i = 0; i < entity.configMaps.length; i ++) {
+	for (var i = 0; i < entity.configMaps && entity.configMaps.length; i ++) {
 		volumes.push({
 			name: "config-volume-" + entity.configMaps[i].name,
 			configMap: {
