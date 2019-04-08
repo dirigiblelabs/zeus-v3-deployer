@@ -76,7 +76,7 @@ function buildContainers(entity) {
 
 function buildVolumes(entity) {
 	var volumes = [];
-	for (var i = 0; i < entity.configMaps && entity.configMaps.length; i ++) {
+	for (var i = 0; entity.configMaps && i < entity.configMaps.length; i ++) {
 		volumes.push({
 			name: "config-volume-" + entity.configMaps[i].name,
 			configMap: {
