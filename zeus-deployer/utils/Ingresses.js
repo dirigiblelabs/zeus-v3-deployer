@@ -1,7 +1,7 @@
 var dao = require('zeus-deployer/data/dao/Deployments');
 var api = require('zeus-deployer/utils/resources/Ingresses');
 
-exports.create = function(server, token, namespace, template, name, ingressHost) {
+exports.create = function(server, token, namespace, template, name, ingressHost, context) {
 	var ingresses = [];
 	var services = dao.getServices(template.id);
 	for (var i = 0 ; i < services.length; i ++) {

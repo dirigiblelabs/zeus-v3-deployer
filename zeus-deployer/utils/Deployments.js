@@ -6,7 +6,7 @@ exports.getApi = function(credentials) {
 	return new DeploymentsApi(credentials.server, credentials.token, credentials.namespace);
 };
 
-exports.create = function(server, token, namespace, template, name) {
+exports.create = function(server, token, namespace, template, name, context) {
 	var entity = {
 		name: name,
         namespace: namespace,

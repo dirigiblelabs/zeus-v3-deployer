@@ -1,7 +1,7 @@
 var dao = require('zeus-deployer/data/dao/Deployments');
 var api = require('zeus-deployer/utils/resources/Services');
 
-exports.create = function(server, token, namespace, template, name) {
+exports.create = function(server, token, namespace, template, name, context) {
 	var services = [];
 	var templateServices = dao.getServices(template.id);
 	for (var i = 0 ; i < templateServices.length ; i ++ ) {

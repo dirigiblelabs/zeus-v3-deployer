@@ -2,7 +2,7 @@ var dao = require("zeus-deployer/data/dao/Deployments");
 var StatefulSetsApi = require("kubernetes/apis/apps/v1/StatefulSets");
 var StatefulSetBuilder = require("kubernetes/builders/apis/apps/v1/StatefulSet");
 
-exports.create = function(server, token, namespace, template, name) {
+exports.create = function(server, token, namespace, template, name, context) {
 	var entity = {
 		name: name,
 		namespace: namespace,

@@ -8,19 +8,19 @@ var Ingresses = require("zeus-deployer/utils/Ingresses");
 var Credentials = require("zeus-deployer/utils/Credentials");
 var Applications = require("zeus-deployer/utils/application/Applications");
 
-exports.create = function(templateId, clusterId, name) {
+exports.create = function(templateId, clusterId, name, context) {
 	var credentials = Credentials.getCredentials(clusterId);
 
 	var template = DeploymentDao.getTemplate(templateId);
-	var configMaps = ConfigMaps.create(credentials.server, credentials.token, credentials.namespace, template, name);
+	var configMaps = ConfigMaps.create(credentials.server, credentials.token, credentials.namespace, template, name, context);
 	var deployment = null;
 	if (template.isStateful) {
-		deployment = StatefulSets.create(credentials.server, credentials.token, credentials.namespace, template, name);
+		deployment = StatefulSets.create(credentials.server, credentials.token, credentials.namespace, template, name, context);
 	} else {
 		deployment = Deployments.create(credentials.server, credentials.token, credentials.namespace, template, name);
 	}
-	var services = Services.create(credentials.server, credentials.token, credentials.namespace, template, name);
-	var ingresses = Ingresses.create(credentials.server, credentials.token, credentials.namespace, template, name, credentials.ingress);
+	var services = Services.create(credentials.server, credentials.token, credentials.namespace, template, name, context);
+	var ingresses = Ingresses.create(credentials.server, credentials.token, credentials.namespace, template, name, credentials.ingress, context);
 
 	Applications.create({
 		name: name,
