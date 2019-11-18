@@ -2,6 +2,7 @@ var Deployments = require("zeus-deployer/utils/Deployments");
 var StatefulSets = require("zeus-deployer/utils/StatefulSets");
 var Services = require("zeus-deployer/utils/resources/Services");
 var Ingresses = require("zeus-deployer/utils/resources/Ingresses");
+var VirtualServices = require("zeus-deployer/utils/resources/VirtualServices");
 
 exports.createDeployment = function(credentials, deployment) {
     var api = getApi(credentials, Deployments);
@@ -20,6 +21,10 @@ exports.createIngress = function(credentials, ingress) {
     return createResource(credentials, Ingresses, ingress);
 };
 
+exports.createVirtualService = function(credentials, virtualService) {
+	return createResource(credentials, VirtualServices, virtualService);
+};
+
 exports.deleteDeployment = function(credentials, name) {
     return deleteResource(credentials, Deployments, name);
 };
@@ -34,6 +39,10 @@ exports.deleteService = function(credentials, name) {
 
 exports.deleteIngress = function(credentials, name) {
     return deleteResource(credentials, Ingresses, name);
+};
+
+exports.deleteVirtualService = function(credentials, name) {
+	return deleteResource(credentials, VirtualServices, name);
 };
 
 function getApi(credentials, api) {
